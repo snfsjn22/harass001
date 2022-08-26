@@ -94,9 +94,26 @@
 //   mutations,
 //   actions
 // }
+import { getToken, setToken, removeToken } from '@/utils/auth'
+
+const state = {
+  token: getToken()
+}
+const mutations = {
+  setToken(state, token) {
+    state.token = token
+    setToken(token)
+  },
+  removeToken(token) {
+    state.token = null
+    removeToken()
+  }
+}
+const actions = {}
+
 export default {
   namespaced: true,
-  state: {},
-  mutations: {},
-  actions: {}
+  state,
+  mutations,
+  actions
 }
