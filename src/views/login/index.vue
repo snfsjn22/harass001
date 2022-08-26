@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="">
+          <img src="@/assets/common/login-logo.png" alt="" />
         </h3>
       </div>
 
@@ -46,6 +46,7 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -64,8 +65,14 @@ export default {
         password: '123456'
       },
       loginRules: {
-        mobile: [{ required: true, trigger: 'blur', message: '手机号不能为空' }, { validator: validateMobile, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', message: '密码不能为空' }, { min: 6, max: 16, message: '密码长度在6-16位之间', trigger: 'blur' }]
+        mobile: [
+          { required: true, trigger: 'blur', message: '手机号不能为空' },
+          { validator: validateMobile, trigger: 'blur' }
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: '密码不能为空' },
+          { min: 6, max: 16, message: '密码长度在6-16位之间', trigger: 'blur' }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -74,13 +81,14 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
+    ...mapActions(['user/login']), // 引入方法
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -92,21 +100,17 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          this.loading = true
-          this.$store
-            .dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/' })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
+      this.$refs.loginForm.validate(async (isOK) => {
+        if (isOK) {
+          try {
+            this.loading = true
+            await this['user/login'](this.loginForm)
+            this.$router.push('/')
+          } catch (error) {
+            console.log(error)
+          } finally {
+            this.loading = false
+          }
         }
       })
     }
