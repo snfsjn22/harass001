@@ -95,6 +95,7 @@
 //   actions
 // }
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login } from '@/api/user'
 
 const state = {
   token: getToken()
@@ -109,7 +110,15 @@ const mutations = {
     removeToken()
   }
 }
-const actions = {}
+const actions = {
+  async login(context, data) {
+    // 调用api接口
+    const result = await login(data)
+    if (result.data.success) {
+      context.commit('setToken', result.data.data)
+    }
+  }
+}
 
 export default {
   namespaced: true,
