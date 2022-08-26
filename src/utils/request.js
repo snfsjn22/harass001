@@ -85,7 +85,27 @@
 // export default service
 
 import axios from 'axios'
-const service = axios.create() // 创建一个axios的实例
+import { Message } from 'element-ui'
+
+const service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API, // axios在不同环境中的请求基地址
+  timeout: 5000 // 超时时间5秒
+}) // 创建一个axios的实例
 service.interceptors.request.use() // 请求拦截器
-service.interceptors.response.use() // 响应拦截器
+service.interceptors.response.use(
+  (response) => {
+    // axios默认加了data
+    const { success, message, data } = response.data
+    if (success) {
+      return data
+    } else {
+      Message.error(message) // 提示错误消息
+      return Promise.reject(new Error(message))
+    }
+  },
+  (error) => {
+    Message.error(error.message) // 提示错误信息
+    return Promise.reject(error) // 返回执行错误
+  }
+) // 响应拦截器
 export default service // 导出axios实例
