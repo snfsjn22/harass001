@@ -95,19 +95,26 @@
 //   actions
 // }
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 
 const state = {
-  token: getToken()
+  token: getToken(),
+  userInfo: {}
 }
 const mutations = {
   setToken(state, token) {
     state.token = token
     setToken(token)
   },
-  removeToken(token) {
+  removeToken(state) {
     state.token = null
     removeToken()
+  },
+  setUserInfo(state, result) {
+    state.userInfo = result
+  },
+  removeUserInfo(state) {
+    state.userInfo = {}
   }
 }
 const actions = {
@@ -115,6 +122,12 @@ const actions = {
     // 调用api接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+  },
+
+  async getUserInfo(context) {
+    const result = await getUserInfo()
+    context.commit('setUserInfo', result) // 提交到mutations
+    return result
   }
 }
 
