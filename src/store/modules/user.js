@@ -95,7 +95,7 @@
 //   actions
 // }
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, getUserDetailById } from '@/api/user'
 
 const state = {
   token: getToken(),
@@ -126,8 +126,17 @@ const actions = {
 
   async getUserInfo(context) {
     const result = await getUserInfo()
-    context.commit('setUserInfo', result) // 提交到mutations
-    return result
+    const baseInfo = await getUserDetailById(result.userId)
+    context.commit('setUserInfo', { ...result, ...baseInfo }) // 提交到mutations
+    return result // 后面做权限时要用
+  },
+
+  // 登出操作
+  logout(context) {
+    // 删除token
+    context.commit('removeToken')
+    // 删除用户资料
+    context.commit('removeUserInfo')
   }
 }
 

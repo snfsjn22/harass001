@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css'
 
 // 定义白名单，里面是不受权限控制的页面
 const whiteList = ['/login', '/404']
-router.beforeEach(function (to, from, next) {
+router.beforeEach(async (to, from, next) => {
   NProgress.start() // 一开始就开启进度条
   // 判断有无token
   if (store.getters.token) {
@@ -14,6 +14,9 @@ router.beforeEach(function (to, from, next) {
     if (to.path === '/login') {
       next('/') // 跳转到主页
     } else {
+      if (!store.getters.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       next() // 不是主页就放行
     }
   } else {
