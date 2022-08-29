@@ -128,7 +128,13 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    Message.error(error.message) // 提示错误信息
+    if (error.response && error.response.data && error.response.data.code === 10002) {
+      // 等于10002时，超时
+      store.dispatch('user/logout') // 登出action 删除token
+      router.push('/login')
+    } else {
+      Message.error(error.message) // 提示错误信息
+    }
     return Promise.reject(error) // 返回执行错误
   }
 )
