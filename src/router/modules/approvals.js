@@ -10,7 +10,8 @@ export default {
       component: () => import('@/views/approvals'),
       // 路由元信息，用来存储数据
       meta: {
-        title: '审批' // 左侧导航读取title属性
+        title: '审批', // 左侧导航读取title属性
+        icon: 'tree-table'
       }
     }
   ]
