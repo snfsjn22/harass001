@@ -20,6 +20,8 @@
 
 <script>
 import TreeTools from './components/tree-tools.vue'
+import { getDepartments } from '@/api/department'
+import { transListToTreeData } from '@/utils'
 export default {
   components: {
     TreeTools
@@ -27,34 +29,23 @@ export default {
   data() {
     return {
       // 头部数据结构
-      company: {
-        name: '江苏传智播客教育科技股份有限公司',
-        manager: '负责人'
-      },
+      company: {},
       defaultProps: {
         label: 'name' // 从name显示内容
       },
       // 树形数据结构
-      departs: [
-        {
-          name: '总裁办',
-          manager: '曹操',
-          children: [
-            {
-              name: '董事会',
-              manager: '曹丕'
-            }
-          ]
-        },
-        {
-          name: '行政部',
-          manager: '刘备'
-        },
-        {
-          name: '人事部',
-          manager: '孙权'
-        }
-      ]
+      departs: []
+    }
+  },
+  created() {
+    this.getDepartments()
+  },
+  methods: {
+    async getDepartments() {
+      const result = await getDepartments()
+      this.company = { name: result.companyName, manager: '负责人' }
+      this.departs = transListToTreeData(result.depts, '')
+      console.log(result)
     }
   }
 }
