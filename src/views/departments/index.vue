@@ -4,17 +4,19 @@
       <!-- 组织架构头部内容 -->
       <el-card class="tree-card">
         <!-- 结构内容 -->
-        <tree-tools :tree-node="company" :is-root="true"></tree-tools>
+        <tree-tools :tree-node="company" :is-root="true" @addDepts="addDepts"></tree-tools>
         <!-- 树形结构 -->
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 传入插槽内容 -->
           <!-- 放置结构内容 -->
-          <tree-tools slot-scope="{ data }" :tree-node="data"></tree-tools>
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts"></tree-tools>
           <!-- /传入插槽内容 -->
         </el-tree>
       </el-card>
       <!-- /组织架构头部内容 -->
     </div>
+    <!-- 放置新增弹层组件  -->
+    <add-dept :show-dialog="showDialog" />
   </div>
 </template>
 
@@ -22,9 +24,11 @@
 import TreeTools from './components/tree-tools.vue'
 import { getDepartments } from '@/api/department'
 import { tranListToTreeData } from '@/utils'
+import AddDept from './components/add-dept.vue'
 export default {
   components: {
-    TreeTools
+    TreeTools,
+    AddDept
   },
   data() {
     return {
@@ -34,7 +38,9 @@ export default {
         label: 'name' // 从name显示内容
       },
       // 树形数据结构
-      departs: []
+      departs: [],
+      showDialog: false, // 默认不显示窗体
+      node: null // 记录当前点击node节点
     }
   },
   created() {
@@ -46,6 +52,11 @@ export default {
       this.company = { name: result.companyName, manager: '负责人' }
       this.departs = tranListToTreeData(result.depts, '')
       console.log(result)
+    },
+    addDepts(node) {
+      this.showDialog = true // 显示弹层
+      // node是当前点击的部门应记录下来
+      this.node = node
     }
   }
 }

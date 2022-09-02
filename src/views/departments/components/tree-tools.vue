@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { delDepartments } from '@/api/department'
 export default {
   props: {
     treeNode: {
@@ -46,10 +47,21 @@ export default {
     operateDepts(type) {
       if (type === 'add') {
         // 添加子部门的操作
+        this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         //  编辑部门的操作
       } else {
         //  删除操作
+        this.$confirm('确定要删除该部门吗')
+          .then(() => {
+            // 如果点击了确定就会进入then
+            return delDepartments(this.treeNode.id) // 返回promise对象
+          })
+          .then(() => {
+            //  删除成功 进入这里
+            this.$emit('delDepts') // 触发自定义事件
+            this.$message.success('删除部门成功')
+          })
       }
     }
   }
