@@ -119,7 +119,7 @@ export default {
       this.peoples = await getEmployeeSimple()
     },
     btnOK() {
-      // 手动校验表单
+      // 手动校验表单.
       this.$refs.deptForm.validate(async (isOK) => {
         if (isOK) {
           if (this.formData.id) {

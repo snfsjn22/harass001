@@ -22,7 +22,7 @@
             </el-table>
             <!-- 分页组件 -->
             <el-row type="flex" justify="center" align="middle" style="height: 60px">
-              <!-- 分页组件 -->
+              <!-- 分页组 件 -->
               <el-pagination layout="prev,pager,next" />
             </el-row>
           </el-tab-pane>
