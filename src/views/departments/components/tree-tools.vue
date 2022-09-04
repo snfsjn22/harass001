@@ -50,6 +50,7 @@ export default {
         this.$emit('addDepts', this.treeNode)
       } else if (type === 'edit') {
         //  编辑部门的操作
+        this.$emit('editDepts', this.treeNode) // 点击谁编辑谁
       } else {
         //  删除操作
         this.$confirm('确定要删除该部门吗')

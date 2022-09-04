@@ -9,14 +9,14 @@
         <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
           <!-- 传入插槽内容 -->
           <!-- 放置结构内容 -->
-          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts"></tree-tools>
+          <tree-tools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepts="addDepts" @editDepts="editDepts"></tree-tools>
           <!-- /传入插槽内容 -->
         </el-tree>
       </el-card>
       <!-- /组织架构头部内容 -->
     </div>
     <!-- 放置新增弹层组件  -->
-    <add-dept :show-dialog="showDialog" :tree-node="node" />
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" @changeDialog="test" />
   </div>
 </template>
 
@@ -57,6 +57,14 @@ export default {
       this.showDialog = true // 显示弹层
       // node是当前点击的部门应记录下来
       this.node = node
+    },
+    test(value) {
+      this.showDialog = value
+    },
+    editDepts(node) {
+      this.showDialog = true // 弹出层
+      this.node = node // 赋值操作的节点
+      this.$refs.addDept.getDepartDetail(node.id) // 直接调用子组件中的方法 传入一个id
     }
   }
 }
