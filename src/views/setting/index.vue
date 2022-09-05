@@ -7,7 +7,7 @@
           <el-tab-pane label="角色管理">
             <!-- 新增角色按钮 -->
             <el-row style="height: 60px">
-              <el-button icon="el-icon-plus" size="small" type="primary">新增角色</el-button>
+              <el-button icon="el-icon-plus" size="small" type="primary" @click="showDialog = true">新增角色</el-button>
             </el-row>
             <!-- 表格 -->
             <el-table border="" :data="list">
@@ -54,7 +54,7 @@
       </el-card>
     </div>
     <!-- 放置一个弹层组件 -->
-    <el-dialog title="编辑部门" :visible="showDialog">
+    <el-dialog title="编辑部门" :visible="showDialog" @close="btnCancel">
       <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
         <el-form-item prop="name" label="角色名称">
           <el-input v-model="roleForm.name"></el-input>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail, updateRole } from '@/api/setting'
+import { getRoleList, getCompanyInfo, deleteRole, getRoleDetail, updateRole, addRole } from '@/api/setting'
 import { mapGetters } from 'vuex'
 export default {
   data() {
@@ -145,16 +145,26 @@ export default {
           await updateRole(this.roleForm)
         } else {
           // 新增业务
+          await addRole(this.roleForm)
         }
         // 重新拉取数据
         this.getRoleList()
         this.$message.success('操作成功')
-        this.showDialog = false // 关闭弹层
+        this.showDialog = false // 关闭弹层->触发el-dialog关闭事件
       } catch (error) {
         console.log(error)
       }
     },
-    btnCancel() {}
+    btnCancel() {
+      console.log('关闭事件')
+      this.roleForm = {
+        name: '',
+        description: ''
+      }
+      // 移除校验规则
+      this.$refs.roleForm.reserFields()
+      this.showDialog = false
+    }
   }
 }
 </script>
