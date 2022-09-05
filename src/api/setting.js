@@ -21,7 +21,7 @@ export function getCompanyInfo(companyId) {
  */
 export function deleteRole(id) {
   return request({
-    url: `/sys/role${id}`,
+    url: `/sys/role/${id}`,
     method: 'delete'
   })
 }

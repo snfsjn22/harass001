@@ -16,7 +16,7 @@
               <el-table-column align="center" prop="description" label="描述" />
               <el-table-column align="center" label="操作">
                 <!-- 作用域插槽 -->
-                <template slot-scope="{ row }">
+                <template v-slot="{ row }">
                   <el-button size="small" type="success">分配权限</el-button>
                   <el-button size="small" type="primary" @click="editRole(row.id)">编辑</el-button>
                   <el-button size="small" type="danger" @click="deleteRole(row.id)">删除</el-button>
