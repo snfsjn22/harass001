@@ -162,7 +162,7 @@ export default {
         description: ''
       }
       // 移除校验规则
-      this.$refs.roleForm.reserFields()
+      this.$refs.roleForm.resetFields()
       this.showDialog = false
     }
   }
