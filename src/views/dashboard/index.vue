@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
+    <upload-excel></upload-excel>
     <!-- <page-tools :show-before="true">
       <template v-slot:before>
         <span>12123123</span>
