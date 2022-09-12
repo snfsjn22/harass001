@@ -1,15 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <!-- <upload-excel></upload-excel> -->
-    <!-- <page-tools :show-before="true">
-      <template v-slot:before>
-        <span>12123123</span>
-      </template>
-      <template v-slot:after>
-        <el-button slot="after" type="primary">导入excel</el-button>
-      </template>
-    </page-tools> -->
+    <image-upload></image-upload>
   </div>
 </template>
 
