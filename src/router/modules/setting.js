@@ -2,7 +2,7 @@ import Layout from '@/layout'
 // 导出员工的路由规则
 export default {
   path: '/setting', // 路由地址
-  name: 'setting',
+  name: 'settings',
   component: Layout,
   children: [
     {

@@ -15,9 +15,13 @@ router.beforeEach(async (to, from, next) => {
       next('/') // 跳转到主页
     } else {
       if (!store.getters.userId) {
-        await store.dispatch('user/getUserInfo')
+        const { roles } = await store.dispatch('user/getUserInfo')
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }])
+        next(to.path)
+      } else {
+        next() // 不是主页就放行
       }
-      next() // 不是主页就放行
     }
   } else {
     // 没有token

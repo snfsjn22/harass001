@@ -1,5 +1,5 @@
 // vuex的权限模块
-import { constantRoutes } from '@/router'
+import { asyncRoutes, constantRoutes } from '@/router'
 // vuex中的permission模块用来存放当前的 静态路由 + 当前用户的 权限路由
 const state = {
   routes: constantRoutes // 所有人默认拥有静态路由
@@ -14,7 +14,19 @@ const mutations = {
     state.routes = [...constantRoutes, ...newRoutes]
   }
 }
-const actions = {}
+const actions = {
+  filterRoutes(context, menus) {
+    const routes = []
+    // 筛选动态路由中和menus中能够对上的路由
+    menus.forEach((key) => {
+      // key是标识
+      routes.push(...asyncRoutes.filter((item) => item.name === key)) // 得到一个数组 元素/空数组
+    })
+    // routes是当前用户所拥有的动态路由权限
+    context.commit('setRoutes', routes)
+    return routes
+  }
+}
 export default {
   namespaced: true,
   state,
